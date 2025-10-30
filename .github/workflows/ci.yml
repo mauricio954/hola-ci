@@ -2,23 +2,31 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ main ]   # cada vez que hagas push a la rama main
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # entorno Linux que GitHub crea temporalmente
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4  # clona tu repo dentro del runner
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'   # instala Python 3.10
+          python-version: '3.10'
 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Run tests
+        run: pytest -q
 
       - name: Run script
-        run: python hola.py  # ejecuta tu programa
+        run: python hola.py
+
